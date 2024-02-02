@@ -45,9 +45,9 @@ func main() {
 			easyemails.WithText("I supported **bold** and *italic* text."),
 			easyemails.WithLineBreak(),
 		),
-		easyemails.WithButton("Click me", "http://example.com"),
+		easyemails.WithButton("Click me", "http://example.com").Align("center"),
 		easyemails.WithParagraph(
-			easyemails.WithText("[Website](http://example.com/website) · [Unsubscribe](http://example.com/unsubscribe)").Centered(),
+			easyemails.WithText("[Website](http://example.com/website) · [Unsubscribe](http://example.com/unsubscribe)"),
 		).FontSize(12),
 	)
 

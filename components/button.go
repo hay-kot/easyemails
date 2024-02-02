@@ -1,19 +1,32 @@
-package easyemails
-
-import "fmt"
-
-func WithButton(text, url string) Button {
-	return Button{text: text, url: url}
-}
+package components
 
 type Button struct {
-	text string
-	url  string
+	text      string
+	url       string
+	alignment string
+}
+
+func (b Button) Text(text string) Button {
+	b.text = text
+	return b
+}
+
+func (b Button) URL(url string) Button {
+	b.url = url
+	return b
+}
+
+func (b Button) Align(alignment string) Button {
+	b.alignment = alignment
+	return b
 }
 
 func (b Button) Render() string {
-	return fmt.Sprintf(`<tr>
-	<td align="center" vertical-align="middle"
+	alignment := orDefault(b.alignment, "left")
+
+	return `<tr>
+	<td align="` + alignment + `" 
+		vertical-align="middle"
 		style="
 		font-size: 0px;
 		padding: 10px 25px;
@@ -23,14 +36,16 @@ func (b Button) Render() string {
 		<table border="0" cellpadding="0" cellspacing="0" role="presentation"
 		style="
 			border-collapse: separate;
-			width: 40%%;
-			line-height: 100%%;
+			width: 40%;
+			line-height: 100%;
 		"
 		>
 			<tbody>
 				<tr>
 					<td
-						align="center" bgcolor="{{ .PrimaryColor }}" role="presentation" valign="middle"
+						align="center" 
+		        bgcolor="{{ .PrimaryColor }}" 
+	        	role="presentation" valign="middle"
 						style="
 						border: none;
 						border-radius: 3px;
@@ -40,7 +55,7 @@ func (b Button) Render() string {
 						"
 					>
 						<a
-						href="%s"
+						href="` + b.url + `"
 						style="
 							display: inline-block;
 							background: {{ .PrimaryColor }};
@@ -49,7 +64,7 @@ func (b Button) Render() string {
 							sans-serif;
 							font-size: 13px;
 							font-weight: normal;
-							line-height: 120%%;
+							line-height: 120%;
 							margin: 0;
 							text-decoration: none;
 							text-transform: none;
@@ -58,7 +73,7 @@ func (b Button) Render() string {
 							border-radius: 3px;
 						"
 						>
-						%s
+						` + b.text + `
 						</a>
 					</td>
 				</tr>
@@ -66,5 +81,5 @@ func (b Button) Render() string {
 		</table>
 	</td>
 </tr>
-`, b.url, b.text)
+`
 }

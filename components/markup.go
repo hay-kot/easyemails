@@ -1,4 +1,4 @@
-package easyemails
+package components
 
 import "regexp"
 
