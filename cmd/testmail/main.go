@@ -46,10 +46,9 @@ func main() {
 			easyemails.WithLineBreak(),
 		),
 		easyemails.WithButton("Click me", "http://example.com"),
-		easyemails.WithParagraphSize(
-			12,
-			easyemails.WithTextCentered("[Website](http://example.com/website) · [Unsubscribe](http://example.com/unsubscribe)"),
-		),
+		easyemails.WithParagraph(
+			easyemails.WithText("[Website](http://example.com/website) · [Unsubscribe](http://example.com/unsubscribe)").Centered(),
+		).FontSize(12),
 	)
 
 	rendered := bldr.Render()

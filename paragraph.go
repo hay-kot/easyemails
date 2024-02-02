@@ -13,13 +13,14 @@ func WithParagraph(blocks ...RenderableParagraph) *Paragraph {
 	return &Paragraph{blocks: blocks}
 }
 
-func WithParagraphSize(size int64, blocks ...RenderableParagraph) *Paragraph {
-	return &Paragraph{size: size, blocks: blocks}
-}
-
 type Paragraph struct {
 	size   int64
 	blocks []RenderableParagraph
+}
+
+func (p *Paragraph) FontSize(size int64) *Paragraph {
+	p.size = size
+	return p
 }
 
 func (p *Paragraph) Render() string {
@@ -47,7 +48,7 @@ func (p *Paragraph) Render() string {
 		style="
 		  font-family: Roboto, Helvetica Neue, Helvetica,
 			Arial, sans-serif;
-		font-size: `+ strconv.FormatInt(p.size, 10) + `px;
+		font-size: ` + strconv.FormatInt(p.size, 10) + `px;
 		  line-height: 1;
 		  text-align: left;
 		  color: #000000;
@@ -72,13 +73,14 @@ func WithText(text string) Text {
 	return Text{text: text}
 }
 
-func WithTextCentered(text string) Text {
-	return Text{text: text, center: true}
-}
-
 type Text struct {
 	center bool
 	text   string
+}
+
+func (t Text) Centered() Text {
+	t.center = true
+	return t
 }
 
 func (t Text) Paragraph() string {
