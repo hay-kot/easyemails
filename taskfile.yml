@@ -1,0 +1,45 @@
+version: "3"
+env:
+  # mailplit SMTP config
+  SMTP_HOST: localhost
+  SMTP_PORT: 1025
+  SMTP_FROM_NAME: EasyMail Test
+  SMTP_AUTH_STRATEGY: NONE
+tasks:
+  test:
+    desc: Runs all go tests using gotestsum - supports passing gotestsum args
+    cmds:
+      - gotestsum {{ .CLI_ARGS }} ./...
+  watch:
+    desc: Runs all go tests using gotestsum in watch mode
+    cmds:
+      - gotestsum --watch -- -v ./...
+  coverage:
+    desc: Runs all go tests with -race flag and generates a coverage report
+    cmds:
+      - go test -race -coverprofile=coverage.out -covermode=atomic ./... -v -cover
+    silent: true
+  tidy:
+    desc: Runs go mod tidy on the backend
+    cmds:
+      - go mod tidy
+  lint:
+    desc: Runs golangci-lint
+    cmds:
+      - golangci-lint run ./...
+  pr:
+    desc: Runs all go test and lint related tasks for PRs
+    cmds:
+      - task: tidy
+      - task: lint
+      - task: test
+
+  mailserver:
+    desc: Runs the test mail server
+    cmds:
+      - docker run --name easymail_dev_mailpit --restart no -e MP_SMTP_AUTH_ACCEPT_ANY=true -e MP_SMTP_AUTH_ALLOW_INSECURE=true -p 8025:8025 -p 1025:1025 axllent/mailpit:latest
+
+  send:
+    desc: Sends a test emails
+    cmds:
+      - go run ./cmd/testmail/main.go
