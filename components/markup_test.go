@@ -1,6 +1,8 @@
 package components
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_inlineLinks(t *testing.T) {
 	type args struct {
@@ -36,6 +38,45 @@ func Test_inlineLinks(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := inlineLinks(tt.args.markup); got != tt.want {
 				t.Errorf("inlineLinks() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_stripMarkup(t *testing.T) {
+	type args struct {
+		markup string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "Empty string",
+			args: args{markup: ""},
+			want: "",
+		},
+		{
+			name: "No matches",
+			args: args{markup: "This is a text without any links."},
+			want: "This is a text without any links.",
+		},
+		{
+			name: "Single match",
+			args: args{markup: "Click [here](http://example.com) for more information."},
+			want: "Click here http://example.com for more information.",
+		},
+		{
+			name: "Multiple matches",
+			args: args{markup: "Visit [Google](http://google.com) and [GitHub](http://github.com) for more."},
+			want: "Visit Google http://google.com and GitHub http://github.com for more.",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := stripMarkup(tt.args.markup); got != tt.want {
+				t.Errorf("stripMarkup() = %v, want %v", got, tt.want)
 			}
 		})
 	}

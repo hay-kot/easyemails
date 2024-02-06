@@ -1,35 +1,5 @@
-package components
-
-type Button struct {
-	text      string
-	url       string
-	alignment string
-}
-
-func (b Button) Text(text string) Button {
-	b.text = text
-	return b
-}
-
-func (b Button) URL(url string) Button {
-	b.url = url
-	return b
-}
-
-func (b Button) Align(alignment string) Button {
-	b.alignment = alignment
-	return b
-}
-
-func (b Button) RenderPlain() string {
-	return b.text + " " + b.url
-}
-
-func (b Button) Render() string {
-	alignment := orDefault(b.alignment, "left")
-
-	return `<tr>
-	<td align="` + alignment + `" 
+<tr>
+	<td align="left" 
 		vertical-align="middle"
 		style="
 		font-size: 0px;
@@ -59,7 +29,7 @@ func (b Button) Render() string {
 						"
 					>
 						<a
-						href="` + b.url + `"
+						href="https://example.com"
 						style="
 							display: inline-block;
 							background: {{ .PrimaryColor }};
@@ -77,7 +47,7 @@ func (b Button) Render() string {
 							border-radius: 3px;
 						"
 						>
-						` + b.text + `
+						Click me!
 						</a>
 					</td>
 				</tr>
@@ -85,5 +55,4 @@ func (b Button) Render() string {
 		</table>
 	</td>
 </tr>
-`
-}
+

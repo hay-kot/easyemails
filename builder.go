@@ -35,6 +35,7 @@ var template string
 // Note that the result of Render() will _still_ be processed by the markup function
 // to format links, bold, and italic texts.
 type Renderable interface {
+	RenderPlain() string
 	Render() string
 }
 
@@ -81,6 +82,16 @@ func (b *Builder) WithPrimaryColor(color string, text string) *Builder {
 func (b *Builder) WithBorderColor(color string) *Builder {
 	b.borderColor = color
 	return b
+}
+
+func (b *Builder) Plain() string {
+	var bldr strings.Builder
+
+	for _, block := range b.blocks {
+		bldr.WriteString(block.RenderPlain())
+	}
+
+	return bldr.String()
 }
 
 func (b *Builder) Render() string {

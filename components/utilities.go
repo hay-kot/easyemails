@@ -1,7 +1,9 @@
 package components
 
-func orDefault(a, b string) string {
-	if a == "" {
+func orDefault[T comparable](a, b T) T {
+	var zero T
+
+	if a == zero {
 		return b
 	}
 	return a
