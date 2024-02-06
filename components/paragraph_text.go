@@ -19,6 +19,10 @@ func (t Text) Align(alignment string) Text {
 	return t
 }
 
+func (t Text) ParagraphPlain() string {
+	return t.text + "\n"
+}
+
 func (t Text) Paragraph() string {
 	alignment := orDefault(t.alignment, "left")
 	return `<div style="text-align: ` + alignment + `;">` + t.text + `</div>`

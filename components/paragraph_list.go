@@ -16,6 +16,16 @@ func (l *List) Ordered() *List {
 	return l
 }
 
+func (l *List) ParagraphPlain() string {
+	var bldr strings.Builder
+
+	for _, item := range l.items {
+		bldr.WriteString("- " + item + "\n")
+	}
+
+	return bldr.String()
+}
+
 func (l *List) Paragraph() string {
 	var bldr strings.Builder
 

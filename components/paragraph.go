@@ -6,6 +6,7 @@ import (
 )
 
 type RenderableParagraph interface {
+	ParagraphPlain() string
 	Paragraph() string
 }
 
@@ -23,38 +24,38 @@ func (p *Paragraph) FontSize(size int64) *Paragraph {
 	return p
 }
 
-func (p *Paragraph) Render() string {
+func (p *Paragraph) RenderPlain() string {
 	var bldr strings.Builder
+	for _, block := range p.blocks {
+		_, ok := block.(LineBreak)
+		if ok {
+			continue
+		}
 
-	if p.size == 0 {
-		p.size = 16
+		bldr.WriteString(block.ParagraphPlain() + "\n")
 	}
+	return strings.TrimSpace(stripMarkup(bldr.String()))
+}
 
+func (p *Paragraph) Render() string {
 	if len(p.blocks) == 0 {
 		return ""
 	}
 
-	bldr.WriteString(`
-	<tr>
-	<td
-	  align="left"
-	  style="
-		font-size: 0px;
-		padding: 10px 25px;
-		word-break: break-word;
-	  "
-	>
-	  <div
-		style="
+	var bldr strings.Builder
+
+	p.size = orDefault(p.size, 16)
+
+	bldr.WriteString(`<tr>
+	<td align="left" style="font-size: 0px; padding: 10px 25px; word-break: break-word;" >
+	  <div style="
 		  font-family: Roboto, Helvetica Neue, Helvetica,
 			Arial, sans-serif;
 	  	font-size: ` + strconv.FormatInt(p.size, 10) + `px;
 		  line-height: 1;
 		  text-align: left;
 		  color: #000000;
-		"
-	  >
-	`)
+		" >`)
 
 	for _, block := range p.blocks {
 		bldr.WriteString(inlineMarkup(block.Paragraph()))
