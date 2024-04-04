@@ -1,38 +1,35 @@
 package components
 
-import "strings"
-
 type Text struct {
-	alignment string
 	text      string
-	styles    []string
+	styles    *styles
 }
 
 func NewText(text string) Text {
-	return Text{text: text}
+	return Text{
+		text:   text,
+		styles: &styles{},
+	}
 }
 
 func (t Text) Style(property string, value string) Text {
-	style := property + ": " + value + ";"
-	t.styles = append(t.styles, style)
+	t.styles.Style(property, value)
 	return t
 }
 
-func (t Text) joinStyles() string {
-	return strings.Join(t.styles, " ")
-}
-
 func (t Text) Centered() Text {
-	t.alignment = "center"
+	t.styles.Style("text-align", "center")
 	return t
 }
 
 func (t Text) Align(alignment string) Text {
-	return t.Style("text-align", alignment)
+	t.styles.Style("text-align", alignment)
+	return t
 }
 
 func (t Text) Size(size string) Text {
-	return t.Style("font-size", size)
+	t.styles.Style("font-size", size)
+	return t
 }
 
 func (t Text) ParagraphPlain() string {
@@ -40,6 +37,6 @@ func (t Text) ParagraphPlain() string {
 }
 
 func (t Text) Paragraph() string {
-	styles := t.joinStyles()
+	styles := t.styles.string()
 	return `<div style="` + styles + `">` + t.text + `</div>`
 }

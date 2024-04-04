@@ -44,7 +44,7 @@ func (p *Paragraph) Render() string {
 
 	var bldr strings.Builder
 
-	p.size = orDefault(p.size, 16)
+	p.size = or(p.size, 16)
 
 	bldr.WriteString(`<tr>
 	<td align="left" style="font-size: 0px; padding: 10px 25px; word-break: break-word;" >
