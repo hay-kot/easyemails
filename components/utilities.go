@@ -25,6 +25,6 @@ func (s *styles) Style(property string, value string) {
 	s.styles = append(s.styles, style)
 }
 
-func (t *styles) string() string {
-	return strings.Join(t.styles, " ")
+func (s *styles) string() string {
+	return strings.Join(s.styles, " ")
 }
