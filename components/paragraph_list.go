@@ -29,7 +29,7 @@ func (l *List) ParagraphPlain() string {
 func (l *List) Paragraph() string {
 	var bldr strings.Builder
 
-	listType := orDefault(l.listType, "ul")
+	listType := or(l.listType, "ul")
 
 	styleType := "disc"
 	if listType == "ol" {

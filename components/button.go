@@ -26,7 +26,7 @@ func (b Button) RenderPlain() string {
 }
 
 func (b Button) Render() string {
-	alignment := orDefault(b.alignment, "left")
+	alignment := or(b.alignment, "left")
 
 	return `<tr>
 	<td align="` + alignment + `" 
@@ -38,11 +38,7 @@ func (b Button) Render() string {
 		"
 	>
 		<table border="0" cellpadding="0" cellspacing="0" role="presentation"
-		style="
-			border-collapse: separate;
-			width: 40%;
-			line-height: 100%;
-		"
+           style="border-collapse: separate; width: 40%; line-height: 100%;"
 		>
 			<tbody>
 				<tr>

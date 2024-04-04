@@ -23,3 +23,7 @@ func WithLineBreak() components.LineBreak {
 func WithList(items ...string) *components.List {
 	return components.NewList(items...)
 }
+
+func WithImage(url string) components.Image {
+	return components.NewImage(url)
+}

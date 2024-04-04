@@ -44,8 +44,13 @@ func main() {
 			easyemails.WithLineBreak(),
 			easyemails.WithText("I supported **bold** and *italic* text."),
 			easyemails.WithLineBreak(),
-			easyemails.WithText("This is a test text with any styles").Style("color", "red").Style("font-size", "20px"),
+			easyemails.WithText("This is a test text with any styles").
+				Style("color", "red").
+				Style("font-size", "20px"),
 		),
+		easyemails.WithImage("https://via.placeholder.com/150").
+			Style("width", "150px").
+			Centered(),
 		easyemails.WithButton("Click me", "http://example.com").Align("center"),
 		easyemails.WithParagraph(
 			easyemails.WithText("[Website](http://example.com/website) · [Unsubscribe](http://example.com/unsubscribe)"),
