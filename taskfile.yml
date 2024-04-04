@@ -10,6 +10,12 @@ tasks:
     desc: Runs all go tests using gotestsum - supports passing gotestsum args
     cmds:
       - gotestsum {{ .CLI_ARGS }} ./...
+  test:update:
+    env:
+      UPDATE_SNAPSHOTS: true
+    desc: run tests and update snapshots
+    cmds:
+      - gotestsum ./...
   watch:
     desc: Runs all go tests using gotestsum in watch mode
     cmds:
