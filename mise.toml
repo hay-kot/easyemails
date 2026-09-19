@@ -1,21 +1,15 @@
 [tools]
 go = "1.27"
 golangci-lint = "2.13.2"
-gotestsum = "1.13.0"
 
 [tasks.test]
-description = "Run all tests with gotestsum - arguments go to gotestsum"
-usage = 'arg "[args]..." help="Arguments for gotestsum" var=#true'
-run = "gotestsum ${usage_args:-} ./..."
+description = "Run all tests - arguments go to go test, e.g. -run Test_Builder"
+run = "go test ./..."
 
 [tasks."test:update"]
 description = "Run all tests and update the snapshots"
 env = { UPDATE_SNAPSHOTS = "true" }
-run = "gotestsum ./..."
-
-[tasks.watch]
-description = "Run all tests with gotestsum in watch mode"
-run = "gotestsum --watch -- -v ./..."
+run = "go test ./..."
 
 [tasks.bench]
 description = "Run all benchmarks - arguments go to go test, e.g. -count 8"
