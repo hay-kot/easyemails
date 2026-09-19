@@ -29,6 +29,23 @@ var template string
 //go:embed templates/header.html
 var headerTemplate string
 
+// templateHead, templateMiddle, and templateTail are the parts of the template
+// around the {{ .Header }} and {{ .Content }} tokens. Render writes the parts
+// and the blocks between them into one buffer.
+var templateHead, templateMiddle, templateTail = splitTemplate(template)
+
+func splitTemplate(t string) (head, middle, tail string) {
+	head, rest, ok := strings.Cut(t, "{{ .Header }}")
+	if !ok {
+		panic("easyemails: template has no {{ .Header }} token")
+	}
+	middle, tail, ok = strings.Cut(rest, "{{ .Content }}")
+	if !ok {
+		panic("easyemails: template has no {{ .Content }} token")
+	}
+	return head, middle, tail
+}
+
 // Renderable is a top-level block of an email. Render returns one or more
 // table rows (<tr>) and RenderPlain returns the block as plain text.
 //
@@ -112,22 +129,65 @@ func (b *Builder) RenderPlain() string {
 
 // Render returns the email as an HTML document.
 func (b *Builder) Render() string {
-	var content strings.Builder
-
-	for _, block := range b.blocks {
-		content.WriteString(block.Render())
+	var (
+		content = make([]string, len(b.blocks))
+		size    = len(template) + len(headerTemplate) + len(b.logo)
+	)
+	for i, block := range b.blocks {
+		content[i] = block.Render()
+		size += len(content[i])
 	}
 
-	var header string
+	// The tokens are longer than typical values, so size is an upper bound
+	// unless the colors or the logo URL are unusually long.
+	var w strings.Builder
+	w.Grow(size)
+
+	b.writeExpanded(&w, templateHead)
 	if b.logo != "" {
-		header = strings.Replace(headerTemplate, "{{ .Logo }}", html.EscapeString(b.logo), 1)
+		b.writeExpanded(&w, headerTemplate)
 	}
+	b.writeExpanded(&w, templateMiddle)
+	for _, c := range content {
+		b.writeExpanded(&w, c)
+	}
+	b.writeExpanded(&w, templateTail)
 
-	rendered := strings.Replace(template, "{{ .Header }}", header, 1)
-	rendered = strings.Replace(rendered, "{{ .Content }}", content.String(), 1)
-	rendered = strings.ReplaceAll(rendered, "{{ .PrimaryColor }}", b.primaryColor)
-	rendered = strings.ReplaceAll(rendered, "{{ .PrimaryTextColor }}", b.primaryTextColor)
-	rendered = strings.ReplaceAll(rendered, "{{ .BorderColor }}", b.borderColor)
+	return w.String()
+}
 
-	return rendered
+// writeExpanded writes s to w with each token replaced by its value. It writes
+// unknown tokens unchanged.
+func (b *Builder) writeExpanded(w *strings.Builder, s string) {
+	for {
+		start := strings.Index(s, "{{ .")
+		if start < 0 {
+			break
+		}
+		end := strings.Index(s[start:], " }}")
+		if end < 0 {
+			break
+		}
+		end += start + len(" }}")
+
+		w.WriteString(s[:start])
+		w.WriteString(b.tokenValue(s[start:end]))
+		s = s[end:]
+	}
+	w.WriteString(s)
+}
+
+func (b *Builder) tokenValue(token string) string {
+	switch token {
+	case "{{ .Logo }}":
+		return html.EscapeString(b.logo)
+	case "{{ .PrimaryColor }}":
+		return b.primaryColor
+	case "{{ .PrimaryTextColor }}":
+		return b.primaryTextColor
+	case "{{ .BorderColor }}":
+		return b.borderColor
+	default:
+		return token
+	}
 }

@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_inlineLinks(t *testing.T) {
+func Test_inlineMarkup_Links(t *testing.T) {
 	type args struct {
 		markup string
 	}
@@ -36,8 +36,8 @@ func Test_inlineLinks(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := inlineLinks(tt.args.markup); got != tt.want {
-				t.Errorf("inlineLinks() = %v, want %v", got, tt.want)
+			if got := inlineMarkup(tt.args.markup); got != tt.want {
+				t.Errorf("inlineMarkup() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -108,6 +108,27 @@ func Test_inlineMarkup_EscapesHTML(t *testing.T) {
 			markup: `[link](https://example.com/?a=1&b="2")`,
 			want:   `<a href="https://example.com/?a=1&amp;b=&quot;2&quot;">link</a>`,
 		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := inlineMarkup(tt.markup); got != tt.want {
+				t.Errorf("inlineMarkup() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_inlineMarkup_BoldAndItalic(t *testing.T) {
+	tests := []struct {
+		name   string
+		markup string
+		want   string
+	}{
+		{"Bold", "a **b** c", "a <strong>b</strong> c"},
+		{"Italic", "a *b* c", "a <em>b</em> c"},
+		{"Bold then italic", "**a** *b*", "<strong>a</strong> <em>b</em>"},
+		{"Single asterisk", "5 * 3", "5 * 3"},
+		{"Bold in link text", "[**a**](https://example.com)", `<a href="https://example.com"><strong>a</strong></a>`},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
