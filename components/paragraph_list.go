@@ -45,7 +45,7 @@ func (l *List) Paragraph() string {
 
 	var bldr strings.Builder
 
-	bldr.WriteString(`<div><` + tag + ` style="list-style-type: ` + styleType + `; line-height: 1.3;">`)
+	bldr.WriteString(`<div><` + tag + ` style="list-style-type: ` + styleType + `;">`)
 
 	for _, item := range l.items {
 		bldr.WriteString("<li>" + inlineMarkup(item) + "</li>")

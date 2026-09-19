@@ -11,8 +11,9 @@ import (
 // use the Builder methods to change a single email. Changes do not affect
 // builders that already exist.
 var (
-	// DefaultLogo is the URL of the image at the top of the email.
-	DefaultLogo = "https://placehold.co/800x200"
+	// DefaultLogo is the URL of the image at the top of the email. An empty
+	// value means no logo.
+	DefaultLogo = ""
 	// DefaultPrimaryColor is the color of buttons and links.
 	DefaultPrimaryColor = "#0c4a6e"
 	// DefaultPrimaryTextColor is the color of text on a DefaultPrimaryColor
@@ -24,6 +25,9 @@ var (
 
 //go:embed templates/basetemplate.html
 var template string
+
+//go:embed templates/header.html
+var headerTemplate string
 
 // Renderable is a top-level block of an email. Render returns one or more
 // table rows (<tr>) and RenderPlain returns the block as plain text.
@@ -56,7 +60,8 @@ func NewBuilder() *Builder {
 	}
 }
 
-// Logo sets the URL of the image at the top of the email.
+// Logo sets the URL of the image at the top of the email. An empty URL
+// removes the logo and the divider below it.
 func (b *Builder) Logo(url string) *Builder {
 	b.logo = url
 	return b
@@ -107,14 +112,19 @@ func (b *Builder) RenderPlain() string {
 
 // Render returns the email as an HTML document.
 func (b *Builder) Render() string {
-	var bldr strings.Builder
+	var content strings.Builder
 
 	for _, block := range b.blocks {
-		bldr.WriteString(block.Render())
+		content.WriteString(block.Render())
 	}
 
-	rendered := strings.Replace(template, "{{ .Content }}", bldr.String(), 1)
-	rendered = strings.Replace(rendered, "{{ .Logo }}", html.EscapeString(b.logo), 1)
+	var header string
+	if b.logo != "" {
+		header = strings.Replace(headerTemplate, "{{ .Logo }}", html.EscapeString(b.logo), 1)
+	}
+
+	rendered := strings.Replace(template, "{{ .Header }}", header, 1)
+	rendered = strings.Replace(rendered, "{{ .Content }}", content.String(), 1)
 	rendered = strings.ReplaceAll(rendered, "{{ .PrimaryColor }}", b.primaryColor)
 	rendered = strings.ReplaceAll(rendered, "{{ .PrimaryTextColor }}", b.primaryTextColor)
 	rendered = strings.ReplaceAll(rendered, "{{ .BorderColor }}", b.borderColor)

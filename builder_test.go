@@ -2,6 +2,7 @@ package easyemails_test
 
 import (
 	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/bradleyjkemp/cupaloy"
@@ -59,6 +60,19 @@ func Test_Builder_HTMLSnapshot(t *testing.T) {
 
 func Test_Builder_RenderPlainSnapshot(t *testing.T) {
 	snapshot(".txt").SnapshotT(t, exampleEmail().RenderPlain())
+}
+
+func Test_Builder_Render_NoLogo(t *testing.T) {
+	rendered := easyemails.NewBuilder().
+		Add(easyemails.WithParagraph(easyemails.WithText("Hello"))).
+		Render()
+
+	if strings.Contains(rendered, "<img") {
+		t.Errorf("rendered output contains a logo:\n%s", rendered)
+	}
+	if strings.Contains(rendered, "border-top") {
+		t.Errorf("rendered output contains the header divider:\n%s", rendered)
+	}
 }
 
 func Benchmark_Builder_Render(b *testing.B) {

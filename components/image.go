@@ -39,8 +39,9 @@ func (i *Image) RenderPlain() string {
 	return i.alt
 }
 
-// margins aligns the img. The img is display: block, so the td align
-// attribute has no effect on it.
+// margins aligns the img in browsers, which ignore the td align attribute
+// because the img is display: block. Outlook ignores auto margins and uses
+// the align attribute.
 func (i *Image) margins() string {
 	switch i.alignment {
 	case AlignCenter:
@@ -53,24 +54,12 @@ func (i *Image) margins() string {
 }
 
 func (i *Image) Render() string {
-	return `
-<tr>
-  <td style="width: 213px">
-    <img
-      height="auto"
-      src="` + escape(i.url) + `"
-      alt="` + escape(i.alt) + `"
-      style="
-        border: 0;
-        display: block;
-        outline: none;
-        text-decoration: none;
-        height: auto;
-        width: 100%;
-        font-size: 13px;` + i.margins() + ` ` + i.styles.String() + `
-      "
-    />
+	alignment := string(or(i.alignment, AlignLeft))
+
+	return `<tr>
+  <td align="` + alignment + `" style="` + blockCellStyle + `">
+    <img src="` + escape(i.url) + `" alt="` + escape(i.alt) + `" height="auto" style="border: 0; display: block; outline: none; text-decoration: none; height: auto; width: 100%; font-size: 13px;` + i.margins() + i.styles.suffix() + `" />
   </td>
 </tr>
-  `
+`
 }

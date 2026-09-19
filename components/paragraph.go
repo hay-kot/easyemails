@@ -77,20 +77,16 @@ func (p *Paragraph) Render() string {
 	)
 
 	bldr.WriteString(`<tr>
-	<td align="` + alignment + `" style="font-size: 0px; padding: 10px 25px; word-break: break-word;" >
-	  <div style="
-		  font-family: Roboto, Helvetica Neue, Helvetica,
-			Arial, sans-serif;
-	  	font-size: ` + fontSize + `px;
-		  line-height: 1;
-		  text-align: ` + alignment + `;
-		  color: #000000;` + p.styles.String() + `
-		" >`)
+  <td align="` + alignment + `" style="` + blockCellStyle + `">
+    <div style="font-family: ` + fontFamily + `; font-size: ` + fontSize + `px; line-height: 1.5; text-align: ` + alignment + `; color: #000000;` + p.styles.suffix() + `">`)
 
 	for _, block := range p.blocks {
 		bldr.WriteString(block.Paragraph())
 	}
 
-	bldr.WriteString(`</div></td></tr>`)
+	bldr.WriteString(`</div>
+  </td>
+</tr>
+`)
 	return bldr.String()
 }

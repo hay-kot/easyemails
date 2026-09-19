@@ -52,8 +52,8 @@ text := bldr.RenderPlain()
 
 ## Logo and Colors
 
-`NewBuilder` reads the `Default` variables, so you can set them once at program start when all of your
-emails look the same:
+Emails have no logo unless you set one. `NewBuilder` reads the `Default` variables, so you can set them
+once at program start when all of your emails look the same:
 
 ```go
 easyemails.DefaultLogo = "https://example.com/logo.png"

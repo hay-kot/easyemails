@@ -37,5 +37,5 @@ func (t *Text) ParagraphPlain() string {
 }
 
 func (t *Text) Paragraph() string {
-	return `<div style="` + t.styles.String() + `">` + inlineMarkup(t.text) + `</div>`
+	return `<div` + t.styles.attr() + `>` + inlineMarkup(t.text) + `</div>`
 }

@@ -42,11 +42,6 @@
         text-decoration: none;
         -ms-interpolation-mode: bicubic;
       }
-
-      p {
-        display: block;
-        margin: 13px 0;
-      }
     </style>
     <!--[if mso]>
         <noscript>
@@ -55,7 +50,7 @@
           <o:AllowPNG/>
           <o:PixelsPerInch>96</o:PixelsPerInch>
         </o:OfficeDocumentSettings>
-        </xml
+        </xml>
         </noscript>
         <![endif]-->
     <!--[if lte mso 11]>
@@ -65,23 +60,6 @@
         }
       </style>
     <![endif]-->
-
-    <!--[if !mso]><!-->
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <style type="text/css">
-      @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
-      @import url(https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700);
-    </style>
-    <!--<![endif]-->
 
     <style type="text/css">
       @media only screen and (min-width: 480px) {
@@ -95,54 +73,6 @@
       .moz-text-html .mj-column-per-100 {
         width: 100% !important;
         max-width: 100%;
-      }
-    </style>
-
-    <style type="text/css">
-      @media only screen and (max-width: 480px) {
-        table.mj-full-width-mobile {
-          width: 100% !important;
-        }
-
-        td.mj-full-width-mobile {
-          width: auto !important;
-        }
-      }
-
-      noinput.mj-menu-checkbox {
-        display: block !important;
-        max-height: none !important;
-        visibility: visible !important;
-      }
-
-      @media only screen and (max-width: 480px) {
-        .mj-menu-checkbox[type="checkbox"] ~ .mj-inline-links {
-          display: none !important;
-        }
-
-        .mj-menu-checkbox[type="checkbox"]:checked ~ .mj-inline-links,
-        .mj-menu-checkbox[type="checkbox"] ~ .mj-menu-trigger {
-          display: block !important;
-          max-width: none !important;
-          max-height: none !important;
-          font-size: inherit !important;
-        }
-
-        .mj-menu-checkbox[type="checkbox"] ~ .mj-inline-links > a {
-          display: block !important;
-        }
-
-        .mj-menu-checkbox[type="checkbox"]:checked
-          ~ .mj-menu-trigger
-          .mj-menu-icon-close {
-          display: block !important;
-        }
-
-        .mj-menu-checkbox[type="checkbox"]:checked
-          ~ .mj-menu-trigger
-          .mj-menu-icon-open {
-          display: none !important;
-        }
       }
     </style>
   </head>
@@ -231,8 +161,8 @@
             <tr>
               <td
                 style="
-                  border-left: 1px solid #dbd9d9;
-                  border-right: 1px solid #dbd9d9;
+                  border-left: 1px solid {{ .BorderColor }};
+                  border-right: 1px solid {{ .BorderColor }};
                   direction: ltr;
                   font-size: 0px;
                   padding: 20px 10px;
@@ -261,94 +191,10 @@
                     width="100%"
                   >
                     <tbody>
-                      <tr>
-                        <td
-                          align="left"
-                          style="
-                            font-size: 0px;
-                            padding: 10px 25px;
-                            word-break: break-word;
-                          "
-                        >
-                          <table
-                            border="0"
-                            cellpadding="0"
-                            cellspacing="0"
-                            role="presentation"
-                            style="
-                              border-collapse: collapse;
-                              border-spacing: 0px;
-                            "
-                          >
-                            <tbody>
-                              <tr>
-                                <td style="width: 213px">
-                                  <img
-                                    height="auto"
-                                    src="{{ .Logo }}"
-                                    style="
-                                      border: 0;
-                                      display: block;
-                                      outline: none;
-                                      text-decoration: none;
-                                      height: auto;
-                                      width: 100%;
-                                      font-size: 13px;
-                                    "
-                                    width="213"
-                                  />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td
-                          align="center"
-                          style="
-                            font-size: 0px;
-                            padding: 10px 25px;
-                            word-break: break-word;
-                          "
-                        >
-                          <p
-                            style="
-                              border-top: solid 1px {{ .BorderColor }};
-                              font-size: 1px;
-                              margin: 0px auto;
-                              width: 100%;
-                            "
-                          ></p>
-
-                          <!--[if mso | IE
-                            ]><table
-                              align="center"
-                              border="0"
-                              cellpadding="0"
-                              cellspacing="0"
-                              style="
-                                border-top: solid 1px {{ .BorderColor }};
-                                font-size: 1px;
-                                margin: 0px auto;
-                                width: 528px;
-                              "
-                              role="presentation"
-                              width="528px"
-                            >
-                              <tr>
-                                <td style="height: 0; line-height: 0">
-                                  &nbsp;
-                                </td>
-                              </tr>
-                            </table><!
-                          [endif]-->
-                        </td>
-                      </tr>
+                      {{ .Header }}
 
                       <!-- Start of Content -->
-                      {{ .Content }} 
+                      {{ .Content }}
                       <!-- End of Content -->
 
                     </tbody>
