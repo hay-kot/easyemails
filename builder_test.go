@@ -17,7 +17,7 @@ func snapshot(ext string) *cupaloy.Config {
 
 func exampleEmail() *easyemails.Builder {
 	return easyemails.NewBuilder().
-		WithLogo("https://example.com/logo.png").
+		Logo("https://example.com/logo.png").
 		Add(
 			easyemails.WithParagraph(
 				easyemails.WithText("Hello, **world**!"),
@@ -31,8 +31,8 @@ func exampleEmail() *easyemails.Builder {
 				easyemails.WithLineBreak(),
 				easyemails.WithText("It supports **bold** and *italic* text.").Centered(),
 			),
-			easyemails.WithImage("https://example.com/image.png").Centered(),
-			easyemails.WithButton("Click me", "https://example.com").Align("center"),
+			easyemails.WithImage("https://example.com/image.png").Alt("An example image").Centered(),
+			easyemails.WithButton("Click me", "https://example.com").Centered(),
 			easyemails.WithParagraph(
 				easyemails.WithText("[Website](https://example.com/website) · [Unsubscribe](https://example.com/unsubscribe)").Centered(),
 			).FontSize(12),
@@ -57,8 +57,8 @@ func Test_Builder_HTMLSnapshot(t *testing.T) {
 	snapshot(".html").SnapshotT(t, exampleEmail().Render())
 }
 
-func Test_Builder_PlainSnapshot(t *testing.T) {
-	snapshot(".txt").SnapshotT(t, exampleEmail().Plain())
+func Test_Builder_RenderPlainSnapshot(t *testing.T) {
+	snapshot(".txt").SnapshotT(t, exampleEmail().RenderPlain())
 }
 
 func Benchmark_Builder_Render(b *testing.B) {
@@ -76,17 +76,17 @@ func Benchmark_Builder_Render(b *testing.B) {
 	})
 }
 
-func Benchmark_Builder_Plain(b *testing.B) {
+func Benchmark_Builder_RenderPlain(b *testing.B) {
 	b.Run("example", func(b *testing.B) {
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
-			_ = exampleEmail().Plain()
+			_ = exampleEmail().RenderPlain()
 		}
 	})
 	b.Run("large", func(b *testing.B) {
 		b.ReportAllocs()
 		for i := 0; i < b.N; i++ {
-			_ = largeEmail().Plain()
+			_ = largeEmail().RenderPlain()
 		}
 	})
 }

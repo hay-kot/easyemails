@@ -12,19 +12,15 @@ func or[T comparable](a, b T) T {
 	return a
 }
 
-// styles is a helper struct to manage styles within a component
-// it provides a nieve way to add styles to a component and render them.
-// It does not provide any validation or type checking. It will simply
-// add the styles to the component by concatenating the string.
-type styles struct {
-	styles []string
+// styles holds inline CSS declarations in the order they were added. It does
+// no validation or deduplication, so for a repeated property the last
+// declaration wins, as CSS specifies.
+type styles []string
+
+func (s *styles) add(property, value string) {
+	*s = append(*s, property+": "+value+";")
 }
 
-func (s *styles) Style(property string, value string) {
-	style := property + ": " + value + ";"
-	s.styles = append(s.styles, style)
-}
-
-func (s *styles) string() string {
-	return strings.Join(s.styles, " ")
+func (s styles) String() string {
+	return strings.Join(s, " ")
 }

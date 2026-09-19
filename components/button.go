@@ -1,32 +1,32 @@
 package components
 
+// Button is a top-level block that renders a link as a button in the
+// builder's primary colors.
 type Button struct {
 	text      string
 	url       string
-	alignment string
+	alignment Alignment
 }
 
-func (b Button) Text(text string) Button {
-	b.text = text
-	return b
+func NewButton(text, url string) *Button {
+	return &Button{text: text, url: url}
 }
 
-func (b Button) URL(url string) Button {
-	b.url = url
-	return b
-}
-
-func (b Button) Align(alignment string) Button {
+func (b *Button) Align(alignment Alignment) *Button {
 	b.alignment = alignment
 	return b
 }
 
-func (b Button) RenderPlain() string {
+func (b *Button) Centered() *Button {
+	return b.Align(AlignCenter)
+}
+
+func (b *Button) RenderPlain() string {
 	return b.text + " " + b.url
 }
 
-func (b Button) Render() string {
-	alignment := or(b.alignment, "left")
+func (b *Button) Render() string {
+	alignment := string(or(b.alignment, AlignLeft))
 
 	return `<tr>
 	<td align="` + alignment + `" 
@@ -59,7 +59,7 @@ func (b Button) Render() string {
 						style="
 							display: inline-block;
 							background: {{ .PrimaryColor }};
-							color: {{ .PrimaryText }};
+							color: {{ .PrimaryTextColor }};
 							font-family: Ubuntu, Helvetica, Arial,
 							sans-serif;
 							font-size: 13px;

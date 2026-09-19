@@ -7,9 +7,7 @@ import (
 )
 
 func Test_Button_PlainSnapshot(t *testing.T) {
-	btn := components.Button{}.
-		Text("Click me!").
-		URL("https://example.com")
+	btn := components.NewButton("Click me!", "https://example.com")
 
 	ss := textSnapshot()
 
@@ -17,9 +15,7 @@ func Test_Button_PlainSnapshot(t *testing.T) {
 }
 
 func Test_Button_HTMLSnapshot(t *testing.T) {
-	btn := components.Button{}.
-		Text("Click me!").
-		URL("https://example.com")
+	btn := components.NewButton("Click me!", "https://example.com")
 
 	ss := htmlSnapshot()
 

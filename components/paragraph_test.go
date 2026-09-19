@@ -11,6 +11,7 @@ func Test_Paragraph_PlainSnapshot(t *testing.T) {
 		components.NewText("**Hello**, *World*!"),
 		components.NewText("This is a test paragraph."),
 		components.NewList("Item 1", "Item 2", "Item 3"),
+		components.NewList("First", "Second").Ordered(),
 		components.NewText("Goodbye!"),
 	)
 
@@ -24,6 +25,7 @@ func Test_Paragraph_HTMLSnapshot(t *testing.T) {
 		components.NewText("**Hello**, *World*!"),
 		components.NewText("This is a test paragraph."),
 		components.NewList("Item 1", "Item 2", "Item 3"),
+		components.NewList("First", "Second").Ordered(),
 		components.NewText("Goodbye!"),
 	)
 

@@ -51,7 +51,7 @@ func main() {
 		easyemails.WithImage("https://via.placeholder.com/150").
 			Style("width", "150px").
 			Centered(),
-		easyemails.WithButton("Click me", "http://example.com").Align("center"),
+		easyemails.WithButton("Click me", "http://example.com").Centered(),
 		easyemails.WithParagraph(
 			easyemails.WithText("[Website](http://example.com/website) · [Unsubscribe](http://example.com/unsubscribe)"),
 		).FontSize(12),
