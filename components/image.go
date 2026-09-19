@@ -58,8 +58,8 @@ func (i *Image) Render() string {
   <td style="width: 213px">
     <img
       height="auto"
-      src="` + i.url + `"
-      alt="` + i.alt + `"
+      src="` + escape(i.url) + `"
+      alt="` + escape(i.alt) + `"
       style="
         border: 0;
         display: block;

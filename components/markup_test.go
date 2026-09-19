@@ -81,3 +81,39 @@ func Test_stripMarkup(t *testing.T) {
 		})
 	}
 }
+
+func Test_inlineMarkup_EscapesHTML(t *testing.T) {
+	tests := []struct {
+		name   string
+		markup string
+		want   string
+	}{
+		{
+			name:   "Tags",
+			markup: `<script>alert("hi")</script>`,
+			want:   `&lt;script&gt;alert(&quot;hi&quot;)&lt;/script&gt;`,
+		},
+		{
+			name:   "Ampersand and apostrophe",
+			markup: "Tom & Jerry's",
+			want:   "Tom &amp; Jerry's",
+		},
+		{
+			name:   "Markup around escaped text",
+			markup: `**<b>** *"quoted"*`,
+			want:   `<strong>&lt;b&gt;</strong> <em>&quot;quoted&quot;</em>`,
+		},
+		{
+			name:   "Quote in link URL",
+			markup: `[link](https://example.com/?a=1&b="2")`,
+			want:   `<a href="https://example.com/?a=1&amp;b=&quot;2&quot;">link</a>`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := inlineMarkup(tt.markup); got != tt.want {
+				t.Errorf("inlineMarkup() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

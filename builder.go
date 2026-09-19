@@ -2,6 +2,7 @@ package easyemails
 
 import (
 	_ "embed"
+	"html"
 	"strings"
 )
 
@@ -28,8 +29,9 @@ var template string
 // table rows (<tr>) and RenderPlain returns the block as plain text.
 //
 // The Builder inserts the output of Render into the document as-is, so it
-// must be valid HTML. The Builder replaces these tokens in the output with its
-// colors: {{ .PrimaryColor }}, {{ .PrimaryTextColor }}, and {{ .BorderColor }}.
+// must be valid HTML with all text escaped. The Builder replaces these tokens
+// in the output with its colors: {{ .PrimaryColor }}, {{ .PrimaryTextColor }},
+// and {{ .BorderColor }}.
 type Renderable interface {
 	RenderPlain() string
 	Render() string
@@ -112,7 +114,7 @@ func (b *Builder) Render() string {
 	}
 
 	rendered := strings.Replace(template, "{{ .Content }}", bldr.String(), 1)
-	rendered = strings.Replace(rendered, "{{ .Logo }}", b.logo, 1)
+	rendered = strings.Replace(rendered, "{{ .Logo }}", html.EscapeString(b.logo), 1)
 	rendered = strings.ReplaceAll(rendered, "{{ .PrimaryColor }}", b.primaryColor)
 	rendered = strings.ReplaceAll(rendered, "{{ .PrimaryTextColor }}", b.primaryTextColor)
 	rendered = strings.ReplaceAll(rendered, "{{ .BorderColor }}", b.borderColor)

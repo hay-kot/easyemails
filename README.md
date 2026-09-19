@@ -17,6 +17,9 @@ Within any text, you can use the following markdown:
 - _Italic_: `*italic*`
 - [Links](http://example.com): `[Links](http://example.com)`
 
+Text is HTML-escaped before the markup is applied, so raw HTML shows as text. Markup in user input
+still converts, so a user can add bold text or links to their own content.
+
 ## Examples
 
 ```go

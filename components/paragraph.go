@@ -6,7 +6,8 @@ import (
 )
 
 // RenderableParagraph is a block inside a Paragraph. Paragraph returns HTML
-// and ParagraphPlain returns plain text. The Paragraph inserts both as-is.
+// and ParagraphPlain returns plain text. The Paragraph inserts both as-is, so
+// Paragraph must return valid HTML with all text escaped.
 type RenderableParagraph interface {
 	ParagraphPlain() string
 	Paragraph() string

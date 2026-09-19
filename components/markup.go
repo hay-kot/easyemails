@@ -42,9 +42,11 @@ func stripLinks(markup string) string {
 	return result
 }
 
-// runs all the inline markup functions
+// inlineMarkup escapes markup for HTML, then converts the inline markup to HTML
+// elements. The markup characters (*, [, ], (, and )) need no escape, so the
+// conversion still finds them.
 func inlineMarkup(markup string) string {
-	markup = inlineLinks(markup)
+	markup = inlineLinks(escape(markup))
 	markup = inlineBold(markup)
 	markup = inlineItalic(markup)
 

@@ -55,7 +55,7 @@ func (b *Button) Render() string {
 						"
 					>
 						<a
-						href="` + b.url + `"
+						href="` + escape(b.url) + `"
 						style="
 							display: inline-block;
 							background: {{ .PrimaryColor }};
@@ -73,7 +73,7 @@ func (b *Button) Render() string {
 							border-radius: 3px;
 						"
 						>
-						` + b.text + `
+						` + escape(b.text) + `
 						</a>
 					</td>
 				</tr>

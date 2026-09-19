@@ -22,5 +22,19 @@ func (s *styles) add(property, value string) {
 }
 
 func (s styles) String() string {
-	return strings.Join(s, " ")
+	return escape(strings.Join(s, " "))
+}
+
+// htmlEscaper escapes text for HTML text nodes and double-quoted attribute
+// values. It leaves apostrophes alone, unlike html.EscapeString, because
+// every attribute in the output uses double quotes.
+var htmlEscaper = strings.NewReplacer(
+	"&", "&amp;",
+	"<", "&lt;",
+	">", "&gt;",
+	`"`, "&quot;",
+)
+
+func escape(s string) string {
+	return htmlEscaper.Replace(s)
 }
