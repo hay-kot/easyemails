@@ -36,8 +36,8 @@ func Test_Paragraph_HTMLSnapshot(t *testing.T) {
 
 func Benchmark_Paragraph_Render(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		_ = components.NewParagraph(
+	for b.Loop() {
+		components.NewParagraph(
 			components.NewText("Hello, **world**! Visit [the site](https://example.com) for *more*."),
 			components.LineBreak{},
 			components.NewList("[one](https://example.com)", "**two**", "three"),

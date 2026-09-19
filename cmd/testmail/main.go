@@ -8,6 +8,7 @@ import (
 	"net/smtp"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/hay-kot/easyemails"
 )
@@ -101,17 +102,17 @@ func (m *Mailer) Send(from string, to []string, subject string, body string) err
 		"Content-Transfer-Encoding": "base64",
 	}
 
-	message := ""
+	var message strings.Builder
 	for k, v := range header {
-		message += fmt.Sprintf("%s: %s\r\n", k, v)
+		fmt.Fprintf(&message, "%s: %s\r\n", k, v)
 	}
-	message += "\r\n" + base64.StdEncoding.EncodeToString([]byte(body))
+	message.WriteString("\r\n" + base64.StdEncoding.EncodeToString([]byte(body)))
 
 	return smtp.SendMail(
 		server,
 		smtp.PlainAuth("", m.Username, m.Password, m.Host),
 		m.From,
 		to,
-		[]byte(message),
+		[]byte(message.String()),
 	)
 }
