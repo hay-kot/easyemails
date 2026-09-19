@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/hay-kot/easyemails/components"
+	"github.com/hay-kot/easyemails/internal/snapshot"
 )
 
 func Test_Image_PlainSnapshot(t *testing.T) {
@@ -12,9 +13,7 @@ func Test_Image_PlainSnapshot(t *testing.T) {
 		Style("border", "1px solid #000").
 		Centered()
 
-	ss := textSnapshot()
-
-	ss.SnapshotT(t, img.RenderPlain())
+	snapshot.Match(t, ".txt", img.RenderPlain())
 }
 
 func Test_Image_HTMLSnapshot(t *testing.T) {
@@ -23,7 +22,5 @@ func Test_Image_HTMLSnapshot(t *testing.T) {
 		Style("border", "1px solid #000").
 		Centered()
 
-	ss := htmlSnapshot()
-
-	ss.SnapshotT(t, img.Render())
+	snapshot.Match(t, ".html", img.Render())
 }

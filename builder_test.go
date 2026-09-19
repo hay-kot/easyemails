@@ -5,16 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bradleyjkemp/cupaloy"
 	"github.com/hay-kot/easyemails"
+	"github.com/hay-kot/easyemails/internal/snapshot"
 )
-
-func snapshot(ext string) *cupaloy.Config {
-	return cupaloy.New(
-		cupaloy.SnapshotSubdirectory(".snapshots"),
-		cupaloy.SnapshotFileExtension(ext),
-	)
-}
 
 func exampleEmail() *easyemails.Builder {
 	return easyemails.NewBuilder().
@@ -55,11 +48,11 @@ func largeEmail() *easyemails.Builder {
 }
 
 func Test_Builder_HTMLSnapshot(t *testing.T) {
-	snapshot(".html").SnapshotT(t, exampleEmail().Render())
+	snapshot.Match(t, ".html", exampleEmail().Render())
 }
 
 func Test_Builder_RenderPlainSnapshot(t *testing.T) {
-	snapshot(".txt").SnapshotT(t, exampleEmail().RenderPlain())
+	snapshot.Match(t, ".txt", exampleEmail().RenderPlain())
 }
 
 func Test_Builder_Render_NoLogo(t *testing.T) {
