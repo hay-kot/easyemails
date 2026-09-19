@@ -4,22 +4,39 @@ on:
   workflow_call:
 
 jobs:
-  Go:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
+      # Installs Go and golangci-lint from mise.lock, so CI lints with the
+      # same versions as a local run.
+      - uses: jdx/mise-action@v4
         with:
-          go-version: 1.21
+          minimum_release_age: 7d
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
-          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
-          version: latest
-          args: --timeout=6m
+          install-mode: none
+
+  test:
+    name: Test (Go ${{ matrix.go-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The two supported Go releases. go.mod requires the older one.
+        go-version: [oldstable, stable]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version: ${{ matrix.go-version }}
+          # The module has no go.sum, which is the default cache key.
+          cache-dependency-path: go.mod
 
       - name: Test
-        run: go test ./... -race
+        run: go test -race ./...
