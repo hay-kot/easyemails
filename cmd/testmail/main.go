@@ -22,7 +22,7 @@ func EnvOrDefault(key, defaultValue string) string {
 func main() {
 	var (
 		SMTPHost   = EnvOrDefault("SMTP_HOST", "localhost")
-		SMTPSender = EnvOrDefault("SMTP_SENDER_EMAIL", "EasyMail Test")
+		SMTPSender = EnvOrDefault("SMTP_SENDER_EMAIL", "easymail@example.com")
 	)
 
 	mailer := &Mailer{
@@ -48,10 +48,11 @@ func main() {
 				Style("color", "red").
 				Style("font-size", "20px"),
 		),
-		easyemails.WithImage("https://via.placeholder.com/150").
+		easyemails.WithImage("https://placehold.co/150").
+			Alt("A placeholder image").
 			Style("width", "150px").
 			Centered(),
-		easyemails.WithButton("Click me", "http://example.com").Align("center"),
+		easyemails.WithButton("Click me", "http://example.com").Centered(),
 		easyemails.WithParagraph(
 			easyemails.WithText("[Website](http://example.com/website) · [Unsubscribe](http://example.com/unsubscribe)"),
 		).FontSize(12),

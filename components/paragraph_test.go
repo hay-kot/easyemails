@@ -11,6 +11,7 @@ func Test_Paragraph_PlainSnapshot(t *testing.T) {
 		components.NewText("**Hello**, *World*!"),
 		components.NewText("This is a test paragraph."),
 		components.NewList("Item 1", "Item 2", "Item 3"),
+		components.NewList("First", "Second").Ordered(),
 		components.NewText("Goodbye!"),
 	)
 
@@ -24,10 +25,22 @@ func Test_Paragraph_HTMLSnapshot(t *testing.T) {
 		components.NewText("**Hello**, *World*!"),
 		components.NewText("This is a test paragraph."),
 		components.NewList("Item 1", "Item 2", "Item 3"),
+		components.NewList("First", "Second").Ordered(),
 		components.NewText("Goodbye!"),
 	)
 
 	ss := htmlSnapshot()
 
 	ss.SnapshotT(t, para.Render())
+}
+
+func Benchmark_Paragraph_Render(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		_ = components.NewParagraph(
+			components.NewText("Hello, **world**! Visit [the site](https://example.com) for *more*."),
+			components.LineBreak{},
+			components.NewList("[one](https://example.com)", "**two**", "three"),
+		).Render()
+	}
 }

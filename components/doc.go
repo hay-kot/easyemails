@@ -1,3 +1,3 @@
-// Package components contains the components of the an email. These are composable
-// within to root package to create an email.
+// Package components contains the blocks of an email. The root package composes
+// them into a full email.
 package components

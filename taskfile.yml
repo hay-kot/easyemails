@@ -16,6 +16,10 @@ tasks:
     desc: run tests and update snapshots
     cmds:
       - gotestsum ./...
+  bench:
+    desc: Runs all benchmarks - supports passing go test args, e.g. -count 8
+    cmds:
+      - go test -run "^$" -bench . -benchmem ./... {{ .CLI_ARGS }}
   watch:
     desc: Runs all go tests using gotestsum in watch mode
     cmds:
