@@ -1,0 +1,40 @@
+[tools]
+go = "1.27"
+golangci-lint = "2.13.2"
+
+[tasks.test]
+description = "Run all tests - arguments go to go test, e.g. -run Test_Builder"
+run = "go test ./..."
+
+[tasks."test:update"]
+description = "Run all tests and update the snapshots"
+env = { UPDATE_SNAPSHOTS = "true" }
+run = "go test ./..."
+
+[tasks.bench]
+description = "Run all benchmarks - arguments go to go test, e.g. -count 8"
+run = 'go test -run "^$" -bench . -benchmem ./...'
+
+[tasks.coverage]
+description = "Run all tests with the race detector and write coverage.out"
+run = "go test -race -coverprofile=coverage.out -covermode=atomic ./... -v -cover"
+
+[tasks.tidy]
+description = "Run go mod tidy"
+run = "go mod tidy"
+
+[tasks.lint]
+description = "Run golangci-lint"
+run = "golangci-lint run ./..."
+
+[tasks.pr]
+description = "Run tidy, lint, and test for a pull request"
+run = [{ task = "tidy" }, { task = "lint" }, { task = "test" }]
+
+[tasks.mailserver]
+description = "Run the mailpit test mail server"
+run = "docker run --rm --name easymail_dev_mailpit -e MP_SMTP_AUTH_ACCEPT_ANY=true -e MP_SMTP_AUTH_ALLOW_INSECURE=true -p 8025:8025 -p 1025:1025 axllent/mailpit:latest"
+
+[tasks.send]
+description = "Send a test email to the mail server"
+run = "go run ./cmd/testmail"

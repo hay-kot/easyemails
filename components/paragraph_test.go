@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/hay-kot/easyemails/components"
+	"github.com/hay-kot/easyemails/internal/snapshot"
 )
 
 func Test_Paragraph_PlainSnapshot(t *testing.T) {
@@ -15,9 +16,7 @@ func Test_Paragraph_PlainSnapshot(t *testing.T) {
 		components.NewText("Goodbye!"),
 	)
 
-	ss := textSnapshot()
-
-	ss.SnapshotT(t, para.RenderPlain())
+	snapshot.Match(t, ".txt", para.RenderPlain())
 }
 
 func Test_Paragraph_HTMLSnapshot(t *testing.T) {
@@ -29,15 +28,13 @@ func Test_Paragraph_HTMLSnapshot(t *testing.T) {
 		components.NewText("Goodbye!"),
 	)
 
-	ss := htmlSnapshot()
-
-	ss.SnapshotT(t, para.Render())
+	snapshot.Match(t, ".html", para.Render())
 }
 
 func Benchmark_Paragraph_Render(b *testing.B) {
 	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		_ = components.NewParagraph(
+	for b.Loop() {
+		components.NewParagraph(
 			components.NewText("Hello, **world**! Visit [the site](https://example.com) for *more*."),
 			components.LineBreak{},
 			components.NewList("[one](https://example.com)", "**two**", "three"),

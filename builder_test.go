@@ -5,16 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bradleyjkemp/cupaloy"
 	"github.com/hay-kot/easyemails"
+	"github.com/hay-kot/easyemails/internal/snapshot"
 )
-
-func snapshot(ext string) *cupaloy.Config {
-	return cupaloy.New(
-		cupaloy.SnapshotSubdirectory(".snapshots"),
-		cupaloy.SnapshotFileExtension(ext),
-	)
-}
 
 func exampleEmail() *easyemails.Builder {
 	return easyemails.NewBuilder().
@@ -42,7 +35,7 @@ func exampleEmail() *easyemails.Builder {
 
 func largeEmail() *easyemails.Builder {
 	b := easyemails.NewBuilder()
-	for i := 0; i < 50; i++ {
+	for i := range 50 {
 		b.Add(
 			easyemails.WithParagraph(
 				easyemails.WithText("Paragraph "+strconv.Itoa(i)+" has **bold**, *italic*, and a [link](https://example.com)."),
@@ -55,11 +48,11 @@ func largeEmail() *easyemails.Builder {
 }
 
 func Test_Builder_HTMLSnapshot(t *testing.T) {
-	snapshot(".html").SnapshotT(t, exampleEmail().Render())
+	snapshot.Match(t, ".html", exampleEmail().Render())
 }
 
 func Test_Builder_RenderPlainSnapshot(t *testing.T) {
-	snapshot(".txt").SnapshotT(t, exampleEmail().RenderPlain())
+	snapshot.Match(t, ".txt", exampleEmail().RenderPlain())
 }
 
 func Test_Builder_Render_NoLogo(t *testing.T) {
@@ -78,14 +71,14 @@ func Test_Builder_Render_NoLogo(t *testing.T) {
 func Benchmark_Builder_Render(b *testing.B) {
 	b.Run("example", func(b *testing.B) {
 		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			_ = exampleEmail().Render()
+		for b.Loop() {
+			exampleEmail().Render()
 		}
 	})
 	b.Run("large", func(b *testing.B) {
 		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			_ = largeEmail().Render()
+		for b.Loop() {
+			largeEmail().Render()
 		}
 	})
 }
@@ -93,14 +86,14 @@ func Benchmark_Builder_Render(b *testing.B) {
 func Benchmark_Builder_RenderPlain(b *testing.B) {
 	b.Run("example", func(b *testing.B) {
 		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			_ = exampleEmail().RenderPlain()
+		for b.Loop() {
+			exampleEmail().RenderPlain()
 		}
 	})
 	b.Run("large", func(b *testing.B) {
 		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			_ = largeEmail().RenderPlain()
+		for b.Loop() {
+			largeEmail().RenderPlain()
 		}
 	})
 }
