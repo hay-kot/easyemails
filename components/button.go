@@ -34,7 +34,7 @@ func (b *Button) Render() string {
       <tbody>
         <tr>
           <td align="center" bgcolor="{{ .PrimaryColor }}" role="presentation" valign="middle" style="border: none; border-radius: 3px; cursor: auto; mso-padding-alt: 10px 24px; background: {{ .PrimaryColor }};">
-            <a href="` + escape(b.url) + `" style="display: inline-block; background: {{ .PrimaryColor }}; color: {{ .PrimaryTextColor }}; font-family: ` + fontFamily + `; font-size: 16px; font-weight: 600; line-height: 1.5; margin: 0; text-decoration: none; text-transform: none; padding: 10px 24px; mso-padding-alt: 0px; border-radius: 3px;">` + escape(b.text) + `</a>
+            <a href="` + escape(b.url) + `" style="display: inline-block; background: {{ .PrimaryColor }}; color: {{ .PrimaryTextColor }}; font-family: ` + fontFamily + `; font-size: 16px; font-weight: 600; line-height: 1.5; word-break: normal; margin: 0; text-decoration: none; text-transform: none; padding: 10px 24px; mso-padding-alt: 0px; border-radius: 3px;">` + escape(b.text) + `</a>
           </td>
         </tr>
       </tbody>
