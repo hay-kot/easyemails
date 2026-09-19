@@ -23,6 +23,10 @@ var (
 	DefaultBorderColor = "#d1d5db"
 )
 
+// template is a single-column layout. Outlook for Windows ignores max-width and
+// padding on a div, so an Outlook-only conditional table gives it the same
+// width and padding.
+//
 //go:embed templates/basetemplate.html
 var template string
 
